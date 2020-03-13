@@ -1,0 +1,78 @@
+﻿@page
+@model Meds_Server.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Meds[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Meds[0].Pieces)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Meds[0].Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Meds[0].BestBefore)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Meds[0].Picture)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Meds[0].BaseSubstance)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Meds[0].BaseSubstanceQuantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Meds[0].Description)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Meds) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Pieces)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BestBefore)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Picture)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BaseSubstance)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BaseSubstanceQuantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

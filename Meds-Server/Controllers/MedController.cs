@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -139,7 +139,7 @@ namespace Meds_Server.Controllers
             }
         }
 
-        /*// GET: api/Meds/user
+        *//*// GET: api/Meds/user
         [HttpGet("{user}")]
         public IEnumerable<Med> Get(string user)
         {
@@ -161,7 +161,7 @@ namespace Meds_Server.Controllers
                     }
                 }
             }
-        }*/
+        }*//*
 
         // POST: api/Med
         [HttpPost()]
@@ -258,3 +258,4 @@ namespace Meds_Server.Controllers
         }
     }
 }
+*/
