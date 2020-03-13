@@ -16,11 +16,12 @@ namespace Meds_Server.Controllers
     public class MedsController : ControllerBase
     {
         DateTime today = DateTime.Today;
+        MedsServerContext db = new MedsServerContext();
 
         [HttpGet()]
         public IEnumerable<Meds> Get()
         {
-            using (var db = new MedsServerContext())
+            using (db)
             {
                 Console.WriteLine("Get meds\t {0}:{1}:{2}", DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), DateTime.Now.Second.ToString());
                 return db.Meds.ToList(); // .Select(u => new { u.Id, u.Name, 0, "", "", "", "", "", ""} )
@@ -31,7 +32,7 @@ namespace Meds_Server.Controllers
         [HttpGet("{command}")]
         public IEnumerable<Meds> Get(string command)
         {
-            using (var db = new MedsServerContext())
+            using (db)
             {
                 Console.WriteLine("Get meds {3}\t {0}:{1}:{2}", DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), DateTime.Now.Second.ToString(), command);
                 if (command.Equals("sorted"))
@@ -53,7 +54,7 @@ namespace Meds_Server.Controllers
         [HttpGet("{first}/{second}")]
         public IEnumerable<Meds> Get(string first, string second)
         {
-            using (var db = new MedsServerContext())
+            using (db)
             {
                 if (first.Equals("date"))
                 {
@@ -80,7 +81,7 @@ namespace Meds_Server.Controllers
         [HttpGet("{id:int}")]
         public Meds Get(int id)
         {
-            using (var db = new MedsServerContext())
+            using (db)
             {
                 try
                 {
@@ -99,7 +100,7 @@ namespace Meds_Server.Controllers
         [HttpPost()]
         public string Post([FromBody]Meds value)
         {
-            using (var db = new MedsServerContext())
+            using (db)
             {
                 try
                 {
@@ -120,7 +121,7 @@ namespace Meds_Server.Controllers
         [HttpPut("{id}")]
         public string Put(int id, [FromBody]Meds value)
         {
-            using (var db = new MedsServerContext())
+            using (db)
             {
                 try
                 {
@@ -151,7 +152,7 @@ namespace Meds_Server.Controllers
         [HttpDelete("{id}")]
         public string Delete(int id)
         {
-            using (var db = new MedsServerContext())
+            using (db)
             {
                 try
                 {
