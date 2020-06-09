@@ -30,8 +30,7 @@ namespace Meds_Server.Model
         {
             modelBuilder.Entity<Meds>(entity =>
             {
-                entity.Property(e => e.BaseSubstance).IsUnicode(false);
-
+                
                 entity.Property(e => e.BaseSubstanceQuantity).IsUnicode(false);
 
                 entity.Property(e => e.Description).IsUnicode(false);
@@ -39,6 +38,7 @@ namespace Meds_Server.Model
                 entity.Property(e => e.Name).IsUnicode(false);
 
                 entity.Property(e => e.Type).IsUnicode(false);
+                entity.Property(e => e.Id).ValueGeneratedNever();
             });
 
             OnModelCreatingPartial(modelBuilder);

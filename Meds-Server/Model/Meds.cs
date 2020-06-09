@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -7,8 +6,9 @@ namespace Meds_Server.Model
 {
     public partial class Meds
     {
-        [Key]
-        public int Id { get; set; }
+        [Key()]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int Id { get; set; } 
 
         [Required]
         [StringLength(50)]
@@ -19,7 +19,7 @@ namespace Meds_Server.Model
         [StringLength(30)]
         public string Type { get; set; }
 
-        [Column("Best_Before", TypeName = "date")]
+        [Column("Best_Before")]
         public DateTime BestBefore { get; set; }
 
         public byte[] Picture { get; set; }

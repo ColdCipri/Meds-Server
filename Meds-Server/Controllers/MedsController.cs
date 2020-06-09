@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Meds_Server.Model;
@@ -16,11 +17,12 @@ namespace Meds_Server.Controllers
     public class MedsController : ControllerBase
     {
         DateTime today = DateTime.Today;
+        MedsServerContext db = new MedsServerContext();
 
         [HttpGet()]
         public IEnumerable<Meds> Get()
         {
-            using (var db = new MedsServerContext())
+            using (db)
             {
                 Console.WriteLine("Get meds\t {0}:{1}:{2}", DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), DateTime.Now.Second.ToString());
                 return db.Meds.ToList(); // .Select(u => new { u.Id, u.Name, 0, "", "", "", "", "", ""} )
@@ -31,9 +33,10 @@ namespace Meds_Server.Controllers
         [HttpGet("{command}")]
         public IEnumerable<Meds> Get(string command)
         {
-            using (var db = new MedsServerContext())
+            using (db)
             {
                 Console.WriteLine("Get meds {3}\t {0}:{1}:{2}", DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), DateTime.Now.Second.ToString(), command);
+
                 if (command.Equals("sorted"))
                 {
                     return db.Meds.OrderBy(x => x.Name).ToList();
@@ -42,6 +45,10 @@ namespace Meds_Server.Controllers
                 {
                     return db.Meds.Where(x => x.BestBefore < today).ToList();
                 }
+                else if (command.Equals("sortedDate"))
+                {
+                    return db.Meds.Where(x => x.BestBefore < today).OrderBy(x => x.Name).ToList();
+                }
                 else
                 {
                     return new List<Meds>();
@@ -49,44 +56,19 @@ namespace Meds_Server.Controllers
             }
         }
 
-        //GET: api/Meds/date/sorted || api/date/null
-        [HttpGet("{first}/{second}")]
-        public IEnumerable<Meds> Get(string first, string second)
-        {
-            using (var db = new MedsServerContext())
-            {
-                if (first.Equals("date"))
-                {
-                    if (second.Equals("sorted"))
-                    {
-                        Console.WriteLine("Get meds {3} sorted by name \t {0}:{1}:{2}", DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), DateTime.Now.Second.ToString(), first);
-                        return db.Meds.Where(x => x.BestBefore < today).OrderBy(x => x.Name).ToList();
-                    }
-                    else
-                    {
-                        Console.WriteLine("Get meds {3} - {4} returns empty list\t {0}:{1}:{2}", DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), DateTime.Now.Second.ToString(), first, second);
-                        return new List<Meds>();
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Get meds {3} - {4} returns empty list\t {0}:{1}:{2}", DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), DateTime.Now.Second.ToString(), first, second);
-                    return new List<Meds>();
-                }
-            }
-        }
-
-        //GET: api/Meds/5
+        //GET: api/Meds/id
         [HttpGet("{id:int}")]
         public Meds Get(int id)
         {
-            using (var db = new MedsServerContext())
+            using (db)
             {
                 try
                 {
+                    var meds = db.Meds.Where(x => x.Id == id).First<Meds>();
                     Console.WriteLine("Get med with id {3}\t {0}:{1}:{2}", DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), DateTime.Now.Second.ToString(), id);
-                    return db.Meds.Where(x => x.Id == id).First<Meds>();
-                } 
+                    return meds;
+
+                }
                 catch (InvalidOperationException)
                 {
                     Console.WriteLine("Failed! There was and error!");
@@ -99,11 +81,12 @@ namespace Meds_Server.Controllers
         [HttpPost()]
         public string Post([FromBody]Meds value)
         {
-            using (var db = new MedsServerContext())
+            using (db)
             {
                 try
                 {
                     db.Meds.Add(value);
+                    
                     db.SaveChanges();
                     Console.WriteLine("Added med with name {3}\t {0}:{1}:{2}", DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), DateTime.Now.Second.ToString(), value.Name);
                     return true.ToString();
@@ -120,7 +103,7 @@ namespace Meds_Server.Controllers
         [HttpPut("{id}")]
         public string Put(int id, [FromBody]Meds value)
         {
-            using (var db = new MedsServerContext())
+            using (db)
             {
                 try
                 {
@@ -151,13 +134,13 @@ namespace Meds_Server.Controllers
         [HttpDelete("{id}")]
         public string Delete(int id)
         {
-            using (var db = new MedsServerContext())
+            using (db)
             {
                 try
                 {
                     var entity = db.Meds.Where(x => x.Id == id).First<Meds>();
                     db.Meds.Remove(entity);
-                    db.SaveChanges(); 
+                    db.SaveChanges();
                     Console.WriteLine("Deleted med with id {3}\t {0}:{1}:{2}", DateTime.Now.Hour.ToString(), DateTime.Now.Minute.ToString(), DateTime.Now.Second.ToString(), id);
                     return true.ToString();
                 }
